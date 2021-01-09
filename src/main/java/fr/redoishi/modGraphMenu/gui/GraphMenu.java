@@ -24,7 +24,7 @@ public class GraphMenu extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
+        this.renderBackgroundTexture(0);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 10, Formatting.WHITE.getColorValue());
         super.render(matrices, mouseX, mouseY, delta);
     }
