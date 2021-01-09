@@ -7,14 +7,14 @@
   "description": "Mod graph menu",
   "license": "MIT",
   "authors": [
-    "Redsarow"
+    "Redoishi"
   ],
   "contributors": [
   ],
   "contact": {
-    "homepage": "https://github.com/redsarow/ModGraphMenu",
-    "sources": "https://github.com/redsarow/ModGraphMenu",
-    "issues ": "https://github.com/redsarow/ModGraphMenu/issues"
+    "homepage": "https://github.com/Redoishi/ModGraphMenu",
+    "sources": "https://github.com/Redoishi/ModGraphMenu",
+    "issues": "https://github.com/Redoishi/ModGraphMenu/issues"
   },
   "environment": "client",
   "entrypoints": {
