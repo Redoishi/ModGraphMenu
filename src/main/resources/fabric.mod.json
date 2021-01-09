@@ -1,37 +1,33 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
-  "version": "${version}",
-
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "id": "modgraphmenu",
+  "icon": "assets/modgraphmenu/icon.png",
+  "version": "$version",
+  "name": "Mod graph menu",
+  "description": "Mod graph menu",
+  "license": "MIT",
   "authors": [
-    "Me!"
+    "Redsarow"
+  ],
+  "contributors": [
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/redsarow/ModGraphMenu",
+    "sources": "https://github.com/redsarow/ModGraphMenu",
+    "issues ": "https://github.com/redsarow/ModGraphMenu/issues"
   },
-
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
-
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
+    "client": [
+      "fr.redoishi.modGraphMenu.ModGraphMenu"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "modgraphmenu.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
-  },
-  "suggests": {
-    "another-mod": "*"
+    "minecraft": ">=1.16-"
   }
 }
