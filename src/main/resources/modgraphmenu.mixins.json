@@ -4,7 +4,7 @@
   "package": "fr.redoishi.modGraphMenu.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "ExampleMixin"
+    "ModsScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
