@@ -28,6 +28,10 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": ">=1.16-"
+    "minecraft": ">=1.16-",
+    "modmenu": ">=1.14.13"
+  },
+  "custom": {
+    "modmenu:parent": "modmenu"
   }
 }
