@@ -1,5 +1,6 @@
 package fr.redoishi.modGraphMenu;
 
+import fr.redoishi.modGraphMenu.gui.graph.GenerateGraph;
 import net.fabricmc.api.ClientModInitializer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +22,7 @@ public class ModGraphMenu implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-
+        GenerateGraph.loadGraph();
     }
+
 }
