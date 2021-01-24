@@ -36,6 +36,7 @@ public class GraphMenu extends Screen {
                 new DefTooltipSupplier(this, ETooltipPositions.RIGHT, "modmenu.title"),
                 NarratorManager.EMPTY
         ));
+        //
         this.graphWidget = new GraphWidget(this, 5, this.height / 4, this.width - 10, (this.height / 4 * 3) - 5);
         addChild(this.graphWidget);
     }
