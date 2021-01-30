@@ -33,7 +33,6 @@ public class GenerateGraph {
         // clear
         modCellList = new HashMap<>();
         graph = new mxGraph();
-        graph.clearSelection();
 
         Object parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
@@ -44,11 +43,15 @@ public class GenerateGraph {
         // add Vertex
         for (ModContainer mod : mods) {
             String modId = mod.getMetadata().getId();
+            // TODO skip fabricmc sub API
             mxCell modCell = (mxCell) graph.insertVertex(parent, modId, modId, 0, 0, SIZE, SIZE);
             modCellList.put(modId, new Cell(modCell, mod));
-            modDep.put(modId, mod.getMetadata().getDepends().stream()
-                    .map(ModDependency::getModId)
-                    .collect(Collectors.toList())
+            modDep.put(
+                    modId,
+                    mod.getMetadata().getDepends()
+                            .stream()
+                            .map(ModDependency::getModId)
+                            .collect(Collectors.toList())
             );
         }
 
@@ -57,8 +60,11 @@ public class GenerateGraph {
             Cell modCell = modCellList.get(modId);
             modDep.get(modId)
                     .stream()
-                    .map(s -> modCellList.get(s).modMxCell)
-                    .forEach(modDepMxCell -> graph.insertEdge(parent, null, null, modCell, modDepMxCell));
+                    .map(s -> modCellList.get(s))
+                    .forEach(modDepCell -> {
+                        modCell.modDep.add(modDepCell);
+                        graph.insertEdge(parent, null, null, modCell.modMxCell, modDepCell.modMxCell);
+                    });
         }
 
         graph.getModel().endUpdate();
