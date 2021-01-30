@@ -10,6 +10,9 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import org.apache.logging.log4j.Logger;
@@ -64,7 +67,9 @@ public class GraphWidget extends DrawableHelper implements Drawable, Element {
         fill(matrices, xOrigin, yOrigin, xOrigin + width, yOrigin + height, new Color(0F, 0F, 0F, 0.5F).getRGB());
         RenderSystem.depthFunc(GL11.GL_LEQUAL);
 
+        GL11.glPushMatrix();
         this.renderGraph(matrices, mouseX, mouseY, delta);
+        GL11.glPopMatrix();
 
         RenderSystem.depthFunc(GL11.GL_GEQUAL);
         RenderSystem.translatef(0.0F, 0.0F, -950.0F);
@@ -92,7 +97,7 @@ public class GraphWidget extends DrawableHelper implements Drawable, Element {
 
     private void initRenderGraph() {
         // TMP
-        GenerateGraph.loadGraph();
+        // GenerateGraph.loadGraph();
 
         btnModList = new HashMap<>();
         List<Cell> modsCell = GenerateGraph.getModCell();
@@ -118,5 +123,28 @@ public class GraphWidget extends DrawableHelper implements Drawable, Element {
             abstractButtonWidget.y = this.y + (int) geometry.getY();
             abstractButtonWidget.render(matrices, mouseX, mouseY, delta);
         });
+
+        // edge
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
+        Color color = Color.WHITE;
+        // GL11.glLineWidth(3);
+
+        List<Cell> modsCell = GenerateGraph.getModCell();
+        for (Cell modCell : modsCell) {
+            if(modCell.modDep.isEmpty()){
+                continue;
+            }
+            double x1 = this.x + modCell.modMxCell.getGeometry().getX();
+            double y1 = this.y + modCell.modMxCell.getGeometry().getY();
+            for(Cell modDep : modCell.modDep){
+                double x2 = this.x + modDep.modMxCell.getGeometry().getX();
+                double y2 = this.y + modDep.modMxCell.getGeometry().getY();
+                bufferBuilder.vertex(x2, y2, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).next();
+                bufferBuilder.vertex(x1, y1, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).next();
+            }
+        }
+
+        Tessellator.getInstance().draw();
     }
 }
