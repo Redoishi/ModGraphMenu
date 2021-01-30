@@ -9,6 +9,8 @@ import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,13 +23,15 @@ public class Cell {
     private static final Identifier minecraft = new Identifier(ModMenu.MOD_ID, "mc_icon.png");
     private static final Identifier fabricGrey = new Identifier(ModMenu.MOD_ID, "grey_fabric_icon.png");
 
-    public mxCell modCell;
+    public mxCell modMxCell;
     public String modId;
     public String modName;
     public Identifier img;
+    public List<Cell> modDep;
 
     public Cell(mxCell modCell, ModContainer mod) {
-        this.modCell = modCell;
+        this.modMxCell = modCell;
+        this.modDep = new ArrayList<>();
 
         ModMetadata metadata = mod.getMetadata();
         this.modId = metadata.getId();

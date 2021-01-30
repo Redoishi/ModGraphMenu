@@ -98,7 +98,7 @@ public class GraphWidget extends DrawableHelper implements Drawable, Element {
         List<Cell> modsCell = GenerateGraph.getModCell();
         for (Cell modCell : modsCell) {
             // btn
-            mxGeometry geometry = modCell.modCell.getGeometry();
+            mxGeometry geometry = modCell.modMxCell.getGeometry();
             btnModList.put(new TexturedButtonWidget(x + (int) geometry.getX(), y + (int) geometry.getY(),
                     GenerateGraph.SIZE, GenerateGraph.SIZE, 0, 0, 0,
                     modCell.img,

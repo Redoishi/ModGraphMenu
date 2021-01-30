@@ -23,35 +23,29 @@ public class GenerateGraph {
 
     public static final int SIZE = 20;
 
-    private static List<Cell> modCellList = new ArrayList<>();
+    private static HashMap<String, Cell> modCellList = new HashMap<>();
     private static mxGraph graph = new mxGraph();
-    /**
-     * map idmod -> lis id mod dep
-     */
-    private static HashMap<String, List<String>> modDep = new HashMap<>();
 
     private GenerateGraph() {
     }
 
     public static void loadGraph() {
         // clear
-        modCellList = new ArrayList<>();
+        modCellList = new HashMap<>();
         graph = new mxGraph();
-        modDep = new HashMap<>();
         graph.clearSelection();
 
         Object parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
 
         Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
-        HashMap<String, mxCell> modIdToCell = new HashMap<>();
+        HashMap<String, List<String>> modDep = new HashMap<>();
 
         // add Vertex
         for (ModContainer mod : mods) {
             String modId = mod.getMetadata().getId();
             mxCell modCell = (mxCell) graph.insertVertex(parent, modId, modId, 0, 0, SIZE, SIZE);
-            modIdToCell.put(modId, modCell);
-            modCellList.add(new Cell(modCell, mod));
+            modCellList.put(modId, new Cell(modCell, mod));
             modDep.put(modId, mod.getMetadata().getDepends().stream()
                     .map(ModDependency::getModId)
                     .collect(Collectors.toList())
@@ -60,11 +54,11 @@ public class GenerateGraph {
 
         // add edge
         for (String modId : modDep.keySet()) {
-            mxCell modCell = modIdToCell.get(modId);
+            Cell modCell = modCellList.get(modId);
             modDep.get(modId)
                     .stream()
-                    .map(modIdToCell::get)
-                    .forEach(modDepCell -> graph.insertEdge(parent, null, null, modCell, modDepCell));
+                    .map(s -> modCellList.get(s).modMxCell)
+                    .forEach(modDepMxCell -> graph.insertEdge(parent, null, null, modCell, modDepMxCell));
         }
 
         graph.getModel().endUpdate();
@@ -78,16 +72,10 @@ public class GenerateGraph {
     }
 
     /**
-     * @return new hashMap with map id => cell
+     * @return list of {@link Cell}
      */
-    public static List<Cell> getModCell() {
-        return new ArrayList<>(modCellList);
+    public static ArrayList<Cell> getModCell() {
+        return new ArrayList<>(modCellList.values());
     }
 
-    /**
-     * @return new hashMap with map id => lis dep id
-     */
-    public static HashMap<String, List<String>> getModDep() {
-        return new HashMap<>(modDep);
-    }
 }
