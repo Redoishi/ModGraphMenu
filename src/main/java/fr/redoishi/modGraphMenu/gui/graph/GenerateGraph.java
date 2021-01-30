@@ -34,6 +34,11 @@ public class GenerateGraph {
     }
 
     public static void loadGraph() {
+        // clear
+        modCellList = new ArrayList<>();
+        graph = new mxGraph();
+        modDep = new HashMap<>();
+        graph.clearSelection();
 
         Object parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
