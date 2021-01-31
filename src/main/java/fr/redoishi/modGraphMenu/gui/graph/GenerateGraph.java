@@ -6,12 +6,11 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.ModDependency;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -38,20 +37,29 @@ public class GenerateGraph {
         graph.getModel().beginUpdate();
 
         Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
-        HashMap<String, List<String>> modDep = new HashMap<>();
+        HashMap<String, Set<String>> modDep = new HashMap<>();
 
         // add Vertex
         for (ModContainer mod : mods) {
             String modId = mod.getMetadata().getId();
-            // TODO skip fabricmc sub API
+            // skip fabricmc sub API
+            if (modId.startsWith("fabric") && !modId.equals("fabric") && !modId.equals("fabricloader")) {
+                continue;
+            }
             mxCell modCell = (mxCell) graph.insertVertex(parent, modId, modId, 0, 0, SIZE, SIZE);
             modCellList.put(modId, new Cell(modCell, mod));
             modDep.put(
                     modId,
                     mod.getMetadata().getDepends()
                             .stream()
-                            .map(ModDependency::getModId)
-                            .collect(Collectors.toList())
+                            .map(modDependency -> {
+                                String modidDep = modDependency.getModId();
+                                if (modidDep.startsWith("fabric") && !modidDep.equals("fabric") && !modidDep.equals("fabricloader")) {
+                                    return "fabric";
+                                }
+                                return modidDep;
+                            })
+                            .collect(Collectors.toSet())
             );
         }
 
