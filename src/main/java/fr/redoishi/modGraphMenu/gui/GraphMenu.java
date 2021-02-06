@@ -44,9 +44,11 @@ public class GraphMenu extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackgroundTexture(0);
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 10, Formatting.WHITE.getColorValue());
-        this.graphWidget.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
+        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 10, Formatting.WHITE.getColorValue());
+
+        // render graph at end for prevent bug in render
+        this.graphWidget.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override

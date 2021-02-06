@@ -46,8 +46,8 @@ public class GraphWidget extends DrawableHelper implements Drawable, Element {
         this.height = height;
 
         // init coord center graph
-        this.x = xOrigin;
-        this.y = yOrigin;
+        this.x = xOrigin + this.width / 2;
+        this.y = yOrigin + this.height / 2;
         this.initRenderGraph();
     }
 
@@ -118,33 +118,34 @@ public class GraphWidget extends DrawableHelper implements Drawable, Element {
     }
 
     private void renderGraph(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        btnModList.forEach((abstractButtonWidget, geometry) -> {
-            abstractButtonWidget.x = this.x + (int) geometry.getX();
-            abstractButtonWidget.y = this.y + (int) geometry.getY();
-            abstractButtonWidget.render(matrices, mouseX, mouseY, delta);
-        });
-
         // edge
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
         Color color = Color.WHITE;
-        // GL11.glLineWidth(3);
+        GL11.glLineWidth(3);
 
         List<Cell> modsCell = GenerateGraph.getModCell();
         for (Cell modCell : modsCell) {
-            if(modCell.modDep.isEmpty()){
+            if (modCell.modDep.isEmpty()) {
                 continue;
             }
-            double x1 = this.x + modCell.modMxCell.getGeometry().getX();
-            double y1 = this.y + modCell.modMxCell.getGeometry().getY();
-            for(Cell modDep : modCell.modDep){
-                double x2 = this.x + modDep.modMxCell.getGeometry().getX();
-                double y2 = this.y + modDep.modMxCell.getGeometry().getY();
+            double x1 = this.x + ((double) GenerateGraph.SIZE / 2) + modCell.modMxCell.getGeometry().getX();
+            double y1 = this.y + ((double) GenerateGraph.SIZE / 2) + modCell.modMxCell.getGeometry().getY();
+            for (Cell modDep : modCell.modDep) {
+                double x2 = this.x + ((double) GenerateGraph.SIZE / 2) + modDep.modMxCell.getGeometry().getX();
+                double y2 = this.y + ((double) GenerateGraph.SIZE / 2) + modDep.modMxCell.getGeometry().getY();
                 bufferBuilder.vertex(x2, y2, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).next();
                 bufferBuilder.vertex(x1, y1, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).next();
             }
         }
 
         Tessellator.getInstance().draw();
+
+        // btn
+        btnModList.forEach((abstractButtonWidget, geometry) -> {
+            abstractButtonWidget.x = this.x + (int) geometry.getX();
+            abstractButtonWidget.y = this.y + (int) geometry.getY();
+            abstractButtonWidget.render(matrices, mouseX, mouseY, delta);
+        });
     }
 }
