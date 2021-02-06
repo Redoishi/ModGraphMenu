@@ -4,7 +4,7 @@
   "icon": "assets/modgraphmenu/icon.png",
   "version": "$version",
   "name": "Mod graph menu",
-  "description": "Mod graph menu",
+  "description": "Add graphic to mod menu",
   "license": "MIT",
   "authors": [
     "Redoishi"
